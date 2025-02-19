@@ -1,0 +1,16 @@
+{
+  "colors" : [
+    {
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "Contents.json",
+      "idiom" : "universal",
+      "unassigned" : true
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
