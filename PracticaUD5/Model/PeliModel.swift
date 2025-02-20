@@ -16,6 +16,7 @@ struct Peli: Identifiable, Decodable{
     var release_date: String
     var genre_ids: [Int]
 }
+//añadimos funciones para traducir el Int genre_ids que nos devuelve la API en un String 
 extension Peli {
     func primerGenero(from dictionary: [Int: String]) -> String {
         if let primerId = genre_ids.first, let nombreGenero = dictionary[primerId] {

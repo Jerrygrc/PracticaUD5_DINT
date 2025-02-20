@@ -8,18 +8,15 @@
 import SwiftUI
 
 struct DetallesView: View {
-    var pelicula: Peli
-    var generoDiccionario: [Int: String]
+    @StateObject var viewModel: DetallesViewModel
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                // Imagen del póster
-                if let posterPath = pelicula.poster_path,
-                   let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)") {
+                if let url = viewModel.posterUrl {
                     AsyncImage(url: url) { image in
                         image.resizable()
-                             .scaledToFill()
+                            .scaledToFill()
                     } placeholder: {
                         Color.gray.opacity(0.3)
                     }
@@ -31,42 +28,41 @@ struct DetallesView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    // Título con la estrella amarilla única
                     HStack {
-                        Text(pelicula.title)
+                        Text(viewModel.pelicula.title)
                             .font(.title)
                             .fontWeight(.medium)
                         Image(systemName: "star.fill")
-                            .foregroundColor(.gold)
+                            .foregroundColor(.gold1)
                     }
                     
-                    // Muestra el año de estreno o la fecha completa si lo prefieres
-                    Text(pelicula.release_date)
+                    Text(viewModel.pelicula.release_date)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.redCarpet)
                     
                     Text("Sinopsis")
-                        .font(.headline)
+                        .foregroundColor(.gray)
                         .padding(.top, 10)
                     
-                    Text(pelicula.overview)
+                    Text(viewModel.pelicula.overview)
                         .font(.body)
+                        .multilineTextAlignment(.center)
                     
                     Text("Categorías")
-                        .font(.headline)
+                        .foregroundColor(.gray)
                         .padding(.top, 10)
                     
-                    // Mostrar todas las categorías en círculos con fondo gris.
-                    // Se obtiene la lista de nombres usando el método de extensión.
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
-                            ForEach(pelicula.todosLosGeneros(from: generoDiccionario), id: \.self) { genero in
+                            ForEach(viewModel.generos, id: \.self) { genero in
                                 Text(genero)
                                     .font(.caption)
                                     .foregroundColor(.black)
-                                    .frame(width: 50, height: 50)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
                                     .background(Color.gray.opacity(0.3))
-                                    .clipShape(Circle())
+                                    .cornerRadius(8)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                         .padding(.vertical, 5)
@@ -81,23 +77,3 @@ struct DetallesView: View {
     }
 }
 
-#Preview {
-    // Preview con datos de ejemplo y diccionario de géneros de ejemplo.
-    let peliculaEjemplo = Peli(
-        id: 1,
-        title: "Película de Ejemplo",
-        vote_average: 7.8,
-        poster_path: "/ejemplo.jpg",
-        overview: "Esta es la descripción de la película de ejemplo. Se muestra para ver cómo se adapta el layout.",
-        release_date: "2025-01-01",
-        genre_ids: [28, 12]
-    )
-    
-    // Diccionario de ejemplo: id de género a nombre.
-    let generoDiccionarioEjemplo: [Int: String] = [
-        28: "Acción",
-        12: "Aventura"
-    ]
-    
-    return DetallesView(pelicula: peliculaEjemplo, generoDiccionario: generoDiccionarioEjemplo)
-}

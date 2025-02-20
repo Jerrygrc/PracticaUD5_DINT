@@ -17,6 +17,7 @@ class PeliViewModel: ObservableObject {
         fetchGeneros()
         fetchPelis()
     }
+    //llamada para convertir los ids de genre_ids en el nombre del género (sin URL components)
     func fetchGeneros(){
         guard let url = URL(string: "https://api.themoviedb.org/3/genre/movie/list?api_key=\(apiKey)&language=es-ES") else { return }
 
@@ -27,7 +28,7 @@ class PeliViewModel: ObservableObject {
                         let decodedResponse = try JSONDecoder().decode(GeneroResponse.self, from: data)
                         DispatchQueue.main.async {
                             self.generoDiccionario = Dictionary(uniqueKeysWithValues: decodedResponse.genres.map { ($0.id, $0.name) })
-                            print("Géneros cargados: \(self.generoDiccionario)") // Verifica en consola
+                            print("Géneros cargados: \(self.generoDiccionario)")
                         }
                     } catch {
                         print("Error al decodificar los géneros: \(error.localizedDescription)")

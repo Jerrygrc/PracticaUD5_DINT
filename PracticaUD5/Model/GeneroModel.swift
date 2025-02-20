@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//Tenemos que crear un modelo para el género porque necesitamos hacer otra llamada a la API deferente a la de las películas
 struct Genero: Codable {
     let id: Int
     let name: String
